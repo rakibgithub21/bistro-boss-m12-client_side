@@ -1,13 +1,15 @@
+import { Link } from "react-router-dom";
 
 
 const Navbar = () => {
     const navLinks = <>
-        <li><a>Item 1</a></li>
+        <li><Link to={'/'}>Home</Link></li>
+        <li><Link to={'/menu'}>Menu</Link></li>
         <li><a>Item 1</a></li>
     
     </>
     return (
-        <div className="navbar bg-opacity-30 fixed z-10 bg-black container mx-auto text-white">
+        <div className="navbar bg-opacity-30 fixed z-10 bg-black container mx-auto md:text-orange-600 lg:text-white">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
