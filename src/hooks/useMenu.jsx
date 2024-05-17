@@ -5,7 +5,7 @@ const useMenu = () => {
     const [menu, setMenu] = useState([])
     const[loading,setLoading] = useState(true)
     useEffect(() => {
-        axios('menu.json')
+        axios('http://localhost:5000/menu')
             .then(res => {
                 setMenu(res.data)
                 setLoading(false)
