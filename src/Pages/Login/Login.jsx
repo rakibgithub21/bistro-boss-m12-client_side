@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+import { AuthContext } from '../../Providers/AuthProvider';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
+    const { signInUser } = useContext(AuthContext)
     const capthcaRef = useRef(null)
     const[disabled,setDisabled] = useState(true)
     useEffect(() => {
@@ -12,7 +15,14 @@ const Login = () => {
         e.preventDefault()
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email,password);
+        console.log(email, password);
+        signInUser(email, password)
+            .then(result => {
+                console.log(result.user);
+            })
+            .catch((error) => {
+            console.log(error.message);
+        })
     }
 
     const handleValidateCaptcha = () => {
@@ -85,7 +95,7 @@ const Login = () => {
                     </a>
                 </div>
 
-                <p className="mt-8 text-xs font-light text-center text-gray-400"> Don't have an account? <a href="#" className="font-medium text-gray-700 dark:text-gray-200 hover:underline">Create One</a></p>
+                <p className="mt-8 text-xs font-light text-center text-gray-400"> Don't have an account? <Link to={'/signup'} className="font-medium text-gray-700 dark:text-gray-200 hover:underline">Create One</Link></p>
             </div>
        </div>
     );
