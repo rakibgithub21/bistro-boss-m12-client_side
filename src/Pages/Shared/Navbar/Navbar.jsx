@@ -1,15 +1,35 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Providers/AuthProvider";
 
 
 const Navbar = () => {
-    const navLinks = <>
+    const { user, logout } = useContext(AuthContext)
+    const handleLogout = () => {
+        logout()
+            .then(() => {
+                
+            })
+            .catch(() => {
+                
+            })
+    }
+    const navLinks = <div className="lg:flex items-center">
         <li><Link to={'/'}>Home</Link></li>
         <li><Link to={'/menu'}>Menu</Link></li>
         <li><Link to={'/order/salad'}>Order Food</Link></li>
-        <li><Link to={'/login'}>Login</Link></li>
-       
-    
-    </>
+
+        {
+            user ? <>
+                <button onClick={handleLogout} className="btn btn-ghost">Logout</button>
+
+            </> : <>
+
+                <li><Link to={'/login'}>Login</Link></li>
+            </>
+        }
+
+    </div>
     return (
         <div className="navbar bg-opacity-30 fixed z-10 bg-black container mx-auto md:text-orange-600 lg:text-white">
             <div className="navbar-start">
@@ -20,15 +40,15 @@ const Navbar = () => {
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         {
                             navLinks
-                       }
+                        }
                     </ul>
                 </div>
                 <a className="btn btn-ghost text-xl">Bistro Boss</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                   
-                  {navLinks}
+
+                    {navLinks}
                 </ul>
             </div>
             <div className="navbar-end">

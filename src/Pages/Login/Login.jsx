@@ -1,32 +1,59 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../Providers/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const { signInUser } = useContext(AuthContext)
-    const capthcaRef = useRef(null)
-    const[disabled,setDisabled] = useState(true)
-    useEffect(() => {
-        loadCaptchaEnginge(6); 
-    }, [])
+    const location = useLocation()
+    const navigate = useNavigate()
+    const form = location.state?.from?.pathname || '/'
+    const [emails, setEmail] = useState('')
     
+
+    const [disabled, setDisabled] = useState(false)
+
+    useEffect(() => {
+        loadCaptchaEnginge(6);
+    }, [])
+
     const handleLoggedIn = (e) => {
         e.preventDefault()
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email, password);
-        signInUser(email, password)
+        console.log(email?email:emails, password);
+
+        signInUser(email?email:emails, password)
             .then(result => {
                 console.log(result.user);
+                Swal.fire({
+                    title: "Logged In Successfully",
+                    showClass: {
+                        popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `
+                    },
+                    hideClass: {
+                        popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `
+                    }
+                });
+                navigate(form)
             })
             .catch((error) => {
-            console.log(error.message);
-        })
+                console.log(error.message);
+            })
     }
 
-    const handleValidateCaptcha = () => {
-        const user_captcha_value = capthcaRef.current.value;
+    const handleValidateCaptcha = (e) => {
+        const user_captcha_value = e.target.value;
         console.log(user_captcha_value);
         if (validateCaptcha(user_captcha_value)) {
             setDisabled(false)
@@ -34,18 +61,24 @@ const Login = () => {
             setDisabled(true)
         }
     }
+    
     return (
         <div className="flex justify-center items-center h-screen">
+            <Helmet>
+                <title>Bistro Boss || Login </title>
+            </Helmet>
             <div className="w-full max-w-sm p-6 m-auto mx-auto bg-white rounded-lg border shadow-md dark:bg-gray-800">
                 <div className="flex justify-center mx-auto">
                     <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="" />
                 </div>
 
                 <form onSubmit={handleLoggedIn} className="mt-6">
+
                     <div>
                         <label htmlFor="email" className="block text-sm text-gray-800 dark:text-gray-200">Email</label>
-                        <input placeholder='Type your name' name="email" id="email" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        <input onChange={(e)=>setEmail(e.target.value)} placeholder='Type your name' name="email" id="email" type="email" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                     </div>
+
 
                     <div className="mt-4">
                         <div className="flex items-center justify-between">
@@ -56,15 +89,23 @@ const Login = () => {
                         <input placeholder='Type your password' name="password" id="password" type="password" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                     </div>
 
+
                     <div>
                         <label htmlFor="captcha" className="block text-sm text-gray-800 dark:text-gray-200"> <LoadCanvasTemplate /> </label>
-                        <input ref={capthcaRef} placeholder='Type the text above' name="captcha" id="email" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
-                        <button onClick={handleValidateCaptcha} className='btn w-full mt-2 btn-xs'>Validate</button>
+                        <input
+                            onBlur={handleValidateCaptcha}
+                            placeholder='Type the text above' name="captcha" id="email" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                     </div>
 
+
+                    {/* {transition - colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50} */}
+
+
                     <div className="mt-6">
-                        <input disabled={disabled} className="w-full px-6 py-2.5 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50" type="submit" value="Login" />
+                        <input disabled={disabled} className="w-full btn btn-primary px-6 py-2.5 text-sm font-medium tracking-wide text-white capitalize " type="submit" value="Login" />
                     </div>
+
+
                 </form>
 
                 <div className="flex items-center justify-between mt-4">
@@ -97,7 +138,7 @@ const Login = () => {
 
                 <p className="mt-8 text-xs font-light text-center text-gray-400"> Don't have an account? <Link to={'/signup'} className="font-medium text-gray-700 dark:text-gray-200 hover:underline">Create One</Link></p>
             </div>
-       </div>
+        </div>
     );
 };
 
