@@ -1,7 +1,17 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+
+import useAuth from "../../hooks/useAuth";
+
 
 const FoodCard = ({ item }) => {
+    const { user } = useAuth()
+    
     const { name, image, price, recipe } = item
+
+    const handleAddToCart = () => {
+        console.log(item,user?.email);
+    }
+    
     return (
         <div className="card bg-base-100 shadow-xl">
             <figure><img className=' w-full p-4' src={image} alt="Shoes" /></figure>
@@ -10,7 +20,7 @@ const FoodCard = ({ item }) => {
                 <h2 className="card-title">{name}</h2>
                 <p>{recipe}</p>
                 <div className="card-actions justify-end">
-                    <button className="btn btn-outline bg-slate-100 border-0 border-orange-400 border-b-4 mt-4 ">Add To Cart</button>
+                    <button onClick={handleAddToCart} className="btn btn-outline bg-slate-100 border-0 border-orange-400 border-b-4 mt-4 ">Add To Cart</button>
                 </div>
             </div>
         </div>
