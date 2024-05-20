@@ -9,10 +9,10 @@ import Secret from "../Pages/Shared/Secret/Secret";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../Layout/Dashboard";
 import Cart from "../Pages/Dashboard/Cart/Cart";
-import Reservation from "../Pages/Dashboard/Cart/Reservation/Reservation";
 import Review from "../Pages/Dashboard/Review/Review";
 import MyHome from "../Pages/Dashboard/MyHome/MyHome";
 import MyBookings from "../Pages/Dashboard/MyBookings/MyBookings";
+import Reservation from "../Pages/Dashboard/Reservation/Reservation";
 
 export const router = createBrowserRouter([
     {

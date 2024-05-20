@@ -27,7 +27,7 @@ const Dashboard = () => {
 
             </div>
             {/* dashboard side bar */}
-            <div className="flex-1 mt-5">
+            <div className="flex-1 p-8">
                 <Outlet></Outlet>
             </div>
         </div>
