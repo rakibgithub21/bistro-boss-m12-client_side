@@ -1,11 +1,42 @@
 import { FaTrash } from "react-icons/fa";
 import useCart from "../../../hooks/useCart";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Cart = () => {
-    const [cart] = useCart()
-    const totalPrice = cart.reduce((total,item)=>total + item.price,0)
+    const [cart,refetch] = useCart()
+    const axiosSecure = useAxiosSecure()
+
+    const totalPrice = cart.reduce((total, item) => total + item.price, 0)
     console.log(totalPrice);
-    
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/carts/${id}`)
+                    .then(res => {
+                        if (res.data.deletedCount > 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            refetch()
+
+                    }
+                    })
+              
+            }
+        });
+    }
+
     return (
         <div >
             <div className="flex justify-evenly">
@@ -29,11 +60,11 @@ const Cart = () => {
                     </thead>
                     <tbody>
                         {
-                            cart.map((item,index) => <tr
-                            key={item._id}
+                            cart.map((item, index) => <tr
+                                key={item._id}
                             >
                                 <th>
-                                   {index + 1}
+                                    {index + 1}
                                 </th>
                                 <td>
                                     <div className="flex items-center gap-3">
@@ -45,21 +76,21 @@ const Cart = () => {
                                     </div>
                                 </td>
                                 <td>
-                                   {item.name}
+                                    {item.name}
                                 </td>
                                 <td>
                                     $ {item.price}
                                 </td>
                                 <th>
-                                    <button className="btn hover:text-rose-600 btn-ghost btn-xs"><FaTrash className="text-lg"></FaTrash></button>
+                                    <button onClick={() => handleDelete(item._id)} className="btn hover:text-rose-600 btn-ghost btn-xs"><FaTrash className="text-lg"></FaTrash></button>
                                 </th>
                             </tr>)
-                      }
-                        
-                    
-                        
-                       
-                        
+                        }
+
+
+
+
+
                     </tbody>
 
                 </table>
