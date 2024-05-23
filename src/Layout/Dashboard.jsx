@@ -1,10 +1,10 @@
-import { FaHome, FaList, FaShoppingBag } from "react-icons/fa";
-import { FaCalendarWeek, FaHouseFloodWaterCircleArrowRight } from "react-icons/fa6";
+import { FaCalendarWeek, FaHome, FaList, FaShoppingBag } from "react-icons/fa";
 import { FcRating } from "react-icons/fc";
 import { IoMdMenu } from "react-icons/io";
 import { NavLink, Outlet } from "react-router-dom";
 
 const Dashboard = () => {
+    
     return (
         <div className="flex gap-10">
             <div className="w-64 h-screen bg-orange-300">
