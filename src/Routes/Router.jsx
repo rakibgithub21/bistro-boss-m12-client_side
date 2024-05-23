@@ -13,6 +13,7 @@ import Review from "../Pages/Dashboard/Review/Review";
 import MyHome from "../Pages/Dashboard/MyHome/MyHome";
 import MyBookings from "../Pages/Dashboard/MyBookings/MyBookings";
 import Reservation from "../Pages/Dashboard/Reservation/Reservation";
+import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 
 export const router = createBrowserRouter([
     {
@@ -21,23 +22,23 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element:<Home></Home>
+                element: <Home></Home>
             },
             {
                 path: '/menu',
-                element:<Menu></Menu>
+                element: <Menu></Menu>
             },
             {
                 path: '/order/:category',
-                element:<Order></Order>
+                element: <Order></Order>
             },
             {
                 path: '/login',
-                element:<Login></Login>
+                element: <Login></Login>
             },
             {
                 path: '/signup',
-                element:<Signup></Signup>
+                element: <Signup></Signup>
             },
             {
                 path: '/secret',
@@ -49,25 +50,36 @@ export const router = createBrowserRouter([
         path: '/dashboard',
         element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
         children: [
+            // admin route start:
+            {
+                path: 'allUsers',
+                element:<AllUsers></AllUsers>
+            },
+
+
+
+
+
+            // admin route end:
             {
                 path: '/dashboard/cart',
-                element:<Cart></Cart>
+                element: <Cart></Cart>
             },
             {
                 path: '/dashboard/reservation',
-                element:<Reservation></Reservation>
+                element: <Reservation></Reservation>
             },
             {
                 path: '/dashboard/review',
-                element:<Review></Review>
+                element: <Review></Review>
             },
             {
                 path: '/dashboard/home',
-                element:<MyHome></MyHome>
+                element: <MyHome></MyHome>
             },
             {
                 path: '/dashboard/bookings',
-                element:<MyBookings></MyBookings>
+                element: <MyBookings></MyBookings>
             },
         ]
     }
