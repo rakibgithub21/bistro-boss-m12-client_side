@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure()
 
-    const { data:users=[],refetch } = useQuery({
+    const { data: users = [], refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosSecure.get('/users')
@@ -44,7 +44,20 @@ const AllUsers = () => {
 
     // make admin
     const handleMakeAdmin = user => {
-        
+        axiosSecure.patch(`/users/admin/${user._id}`)
+            .then(res => {
+                console.log(res.data);
+                if (res.data.modifiedCount > 0) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: `${user?.name} is admin now`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    refetch()
+                }
+            })
     }
 
 
@@ -68,19 +81,21 @@ const AllUsers = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user,idx) => <tr key={user._id}>
+                            {users.map((user, idx) => <tr key={user._id}>
                                 <th>{idx + 1}</th>
                                 <td>{user?.name}</td>
                                 <td>{user?.email}</td>
                                 <td>
-                                    <button onClick={() => handleMakeAdmin(user)} className="btn hover:text-rose-600 btn-ghost btn-xs"><FaUsers className="text-lg"></FaUsers></button>
+                                    {
+                                        user.role === 'admin' ? "Admin" : <button onClick={() => handleMakeAdmin(user)} className="btn hover:text-rose-600 btn-ghost btn-xs"><FaUsers className="text-lg"></FaUsers></button>
+                                    }
                                 </td>
 
                                 <td>
                                     <button onClick={() => handleDeleteUser(user)} className="btn hover:text-rose-600 btn-ghost btn-xs"><FaTrash className="text-lg"></FaTrash></button>
                                 </td>
                             </tr>)}
-                      
+
                         </tbody>
                     </table>
                 </div>
